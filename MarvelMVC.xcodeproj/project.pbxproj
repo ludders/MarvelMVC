@@ -13,7 +13,7 @@
 		9DE05BFD2381E3FB0061AC2E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9DE05BFB2381E3FB0061AC2E /* LaunchScreen.storyboard */; };
 		9DE05C082381E3FC0061AC2E /* MarvelMVCTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DE05C072381E3FC0061AC2E /* MarvelMVCTests.swift */; };
 		9DE05C132381E3FC0061AC2E /* MarvelMVCUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DE05C122381E3FC0061AC2E /* MarvelMVCUITests.swift */; };
-		9DE05C232381EC3C0061AC2E /* Character.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DE05C222381EC3C0061AC2E /* Character.swift */; };
+		9DE05C232381EC3C0061AC2E /* CharacterResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DE05C222381EC3C0061AC2E /* CharacterResponse.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -46,7 +46,7 @@
 		9DE05C0E2381E3FC0061AC2E /* MarvelMVCUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MarvelMVCUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		9DE05C122381E3FC0061AC2E /* MarvelMVCUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarvelMVCUITests.swift; sourceTree = "<group>"; };
 		9DE05C142381E3FC0061AC2E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		9DE05C222381EC3C0061AC2E /* Character.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Character.swift; sourceTree = "<group>"; };
+		9DE05C222381EC3C0061AC2E /* CharacterResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterResponse.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -99,7 +99,7 @@
 			children = (
 				9DE05BF02381E3FA0061AC2E /* AppDelegate.swift */,
 				9DE05BF42381E3FA0061AC2E /* ListViewController.swift */,
-				9DE05C222381EC3C0061AC2E /* Character.swift */,
+				9DE05C222381EC3C0061AC2E /* CharacterResponse.swift */,
 				9DE05BF92381E3FB0061AC2E /* Assets.xcassets */,
 				9DE05BFB2381E3FB0061AC2E /* LaunchScreen.storyboard */,
 				9DE05BFE2381E3FB0061AC2E /* Info.plist */,
@@ -255,7 +255,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9DE05C232381EC3C0061AC2E /* Character.swift in Sources */,
+				9DE05C232381EC3C0061AC2E /* CharacterResponse.swift in Sources */,
 				9DE05BF52381E3FA0061AC2E /* ListViewController.swift in Sources */,
 				9DE05BF12381E3FA0061AC2E /* AppDelegate.swift in Sources */,
 			);
