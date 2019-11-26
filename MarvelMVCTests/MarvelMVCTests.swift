@@ -20,8 +20,7 @@ class MarvelMVCTests: XCTestCase {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
 
-    func testFetchCharacterReturnsAnArrayOfCharacters() {
-        let result = listViewController.fetchCharacters()
-        XCTAssert((result as Any) is [Character])
+    func testExample() {
+
     }
 }

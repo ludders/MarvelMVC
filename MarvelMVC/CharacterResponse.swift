@@ -16,13 +16,13 @@ struct CharacterAPIResponse: Codable {
 // MARK: - DataClass
 struct DataClass: Codable {
     let offset, limit, total, count: Int?
-    let results: [Character]?
+    let results: [CharacterData]?
 }
 
 // MARK: - Result
-struct Character: Codable {
+struct CharacterData: Codable {
     let id: Int?
-    let name, resultDescription: String?
+    let name, description: String?
     let modified: String?
     let thumbnail: Thumbnail?
     let resourceURI: String?
@@ -32,9 +32,7 @@ struct Character: Codable {
     let urls: [URLElement]?
 
     enum CodingKeys: String, CodingKey {
-        case id, name
-        case resultDescription = "description"
-        case modified, thumbnail, resourceURI, comics, series, stories, events, urls
+        case id, name, description, modified, thumbnail, resourceURI, comics, series, stories, events, urls
     }
 }
 
@@ -77,8 +75,8 @@ enum ItemType: String, Codable {
 
 // MARK: - Thumbnail
 struct Thumbnail: Codable {
-    let path: String?
-    let thumbnailExtension: Extension?
+    let path: String
+    let thumbnailExtension: Extension
 
     enum CodingKeys: String, CodingKey {
         case path
