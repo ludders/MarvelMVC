@@ -9,8 +9,16 @@
 import Foundation
 import UIKit
 
-struct Character {
+struct Character: Equatable {
     var name: String?
     var description: String?
+    var imageURL: String?
     var image: UIImage?
+
+    static func == (lhs: Character, rhs: Character) -> Bool {
+        return
+            lhs.name == rhs.name &&
+            lhs.description == rhs.description &&
+            lhs.imageURL == rhs.imageURL
+    }
 }

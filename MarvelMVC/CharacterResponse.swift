@@ -6,7 +6,7 @@
 import Foundation
 
 // MARK: - CharacterAPIResponse
-struct CharacterAPIResponse: Codable {
+struct MarvelAPIResponse: Codable {
     let code: Int?
     let status, copyright, attributionText, attributionHTML: String?
     let etag: String?
@@ -16,7 +16,12 @@ struct CharacterAPIResponse: Codable {
 // MARK: - DataClass
 struct DataClass: Codable {
     let offset, limit, total, count: Int?
-    let results: [CharacterData]?
+    let characters: [CharacterData]?
+
+    enum CodingKeys: String, CodingKey {
+        case offset, limit, total, count
+        case characters = "results"
+    }
 }
 
 // MARK: - Result
@@ -76,16 +81,12 @@ enum ItemType: String, Codable {
 // MARK: - Thumbnail
 struct Thumbnail: Codable {
     let path: String
-    let thumbnailExtension: Extension
+    let thumbnailExtension: String
 
     enum CodingKeys: String, CodingKey {
         case path
         case thumbnailExtension = "extension"
     }
-}
-
-enum Extension: String, Codable {
-    case jpg = "jpg"
 }
 
 // MARK: - URLElement
