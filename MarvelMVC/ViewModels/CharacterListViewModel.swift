@@ -9,7 +9,13 @@
 import Foundation
 import UIKit
 
-class CharacterListViewModel {
+protocol CharacterListViewModelProtocol {
+    var characters: [Character] { get set }
+    var dataController: CharacterDataControllable { get set }
+    var imageDataController: CharacterImageDataControllable { get set }
+}
+
+class CharacterListViewModel: CharacterListViewModelProtocol {
 
     var characters: [Character]
     var dataController: CharacterDataControllable

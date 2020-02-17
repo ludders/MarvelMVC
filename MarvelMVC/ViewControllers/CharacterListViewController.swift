@@ -10,14 +10,11 @@ import UIKit
 
 class CharacterListViewController: UITableViewController, UITableViewDataSourcePrefetching, CharacterDataControllerDelegate, CharacterImageDataControllerDelegate {
 
-    var characterListViewModel = CharacterListViewModel()
-    var dataController: CharacterDataControllable!
-    var imageDataController: CharacterImageDataControllable!
+    var characterListViewModel: CharacterListViewModelProtocol = CharacterListViewModel()
     var defaultCharacterImage: UIImage? = UIImage(named: "characterDefault")
 
-    init() {
-        self.dataController = characterListViewModel.dataController
-        self.imageDataController = characterListViewModel.imageDataController
+    init(characterListViewModel: CharacterListViewModelProtocol = CharacterListViewModel()) {
+        self.characterListViewModel = characterListViewModel
         super.init(nibName: nil, bundle: Bundle.main)
     }
 
@@ -30,9 +27,9 @@ class CharacterListViewController: UITableViewController, UITableViewDataSourceP
         navigationController?.navigationBar.prefersLargeTitles = true
         navigationItem.title = "Characters"
         tableView.register(CharacterTableViewCell.self, forCellReuseIdentifier: "CharacterTableViewCell")
-        imageDataController.defaultImage = defaultCharacterImage
-        self.dataController.delegate = self
-        self.imageDataController.delegate = self
+        characterListViewModel.imageDataController.defaultImage = defaultCharacterImage
+        characterListViewModel.dataController.delegate = self
+        characterListViewModel.imageDataController.delegate = self
         characterListViewModel.dataController.fetchCharacters()
     }
 
@@ -61,8 +58,9 @@ class CharacterListViewController: UITableViewController, UITableViewDataSourceP
     }
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let detailViewController = DetailViewController(character: characterListViewModel.characters[indexPath.row])
-        navigationController?.pushViewController(detailViewController, animated: true)
+        let character = characterListViewModel.characters[indexPath.row]
+        let detailCoordinator = DetailCoordinator(navigationController: navigationController!, character: character)
+        detailCoordinator.start()
     }
 
     // MARK: - Table view data source prefetching function(s)
