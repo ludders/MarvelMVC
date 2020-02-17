@@ -45,6 +45,7 @@ class CharacterImageDataController: CharacterImageDataControllable {
 
                     let image = UIImage(data: imageData)
                     self.delegate?.didFetchImage(for: character, image: image)
+                    print("image fetched for \(character.name)")
             }
         }
         task.resume()

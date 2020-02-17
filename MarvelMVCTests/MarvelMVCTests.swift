@@ -11,7 +11,7 @@ import XCTest
 
 class MarvelMVCTests: XCTestCase {
 
-    let listViewController = ListViewController()
+    let listViewController = CharacterListViewController()
 
     override func setUp() {
     }

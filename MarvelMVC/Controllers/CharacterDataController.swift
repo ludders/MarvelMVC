@@ -59,5 +59,4 @@ class CharacterDataController: NSObject, CharacterDataControllable {
         let character = Character(name: result.name, description: result.description, imageURL: imageURL, image: nil)
         self.characters.append(character)
     }
-
 }

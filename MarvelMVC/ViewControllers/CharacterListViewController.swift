@@ -8,19 +8,16 @@
 
 import UIKit
 
-class ListViewController: UITableViewController, UITableViewDataSourcePrefetching, CharacterDataControllerDelegate, CharacterImageDataControllerDelegate {
+class CharacterListViewController: UITableViewController, UITableViewDataSourcePrefetching, CharacterDataControllerDelegate, CharacterImageDataControllerDelegate {
 
-
-    var characters = [Character]()
+    var characterListViewModel = CharacterListViewModel()
     var dataController: CharacterDataControllable!
     var imageDataController: CharacterImageDataControllable!
     var defaultCharacterImage: UIImage? = UIImage(named: "characterDefault")
 
-    init(dataController: CharacterDataControllable = CharacterDataController(),
-         imageDataController: CharacterImageDataControllable = CharacterImageDataController()) {
-
-        self.dataController = dataController
-        self.imageDataController = imageDataController
+    init() {
+        self.dataController = characterListViewModel.dataController
+        self.imageDataController = characterListViewModel.imageDataController
         super.init(nibName: nil, bundle: Bundle.main)
     }
 
@@ -33,11 +30,10 @@ class ListViewController: UITableViewController, UITableViewDataSourcePrefetchin
         navigationController?.navigationBar.prefersLargeTitles = true
         navigationItem.title = "Characters"
         tableView.register(CharacterTableViewCell.self, forCellReuseIdentifier: "CharacterTableViewCell")
-
-        dataController.delegate = self
-        imageDataController.delegate = self
         imageDataController.defaultImage = defaultCharacterImage
-        dataController.fetchCharacters()
+        self.dataController.delegate = self
+        self.imageDataController.delegate = self
+        characterListViewModel.dataController.fetchCharacters()
     }
 
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -47,7 +43,7 @@ class ListViewController: UITableViewController, UITableViewDataSourcePrefetchin
     // MARK: - Table view data source
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return characters.count
+        return characterListViewModel.characters.count
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -55,9 +51,9 @@ class ListViewController: UITableViewController, UITableViewDataSourcePrefetchin
             fatalError("Failed to dequeue CharacterTableViewCell from tableView")
         }
 
-        let character = characters[indexPath.row]
+        let character = characterListViewModel.characters[indexPath.row]
         if character.image == nil {
-            imageDataController.fetchImage(for: character)
+            characterListViewModel.imageDataController.fetchImage(for: character)
         }
         cell.configure(with: character)
 
@@ -65,7 +61,7 @@ class ListViewController: UITableViewController, UITableViewDataSourcePrefetchin
     }
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let detailViewController = DetailViewController(character: characters[indexPath.row])
+        let detailViewController = DetailViewController(character: characterListViewModel.characters[indexPath.row])
         navigationController?.pushViewController(detailViewController, animated: true)
     }
 
@@ -73,36 +69,33 @@ class ListViewController: UITableViewController, UITableViewDataSourcePrefetchin
 
     func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
         for indexPath in indexPaths {
-            let character = characters[indexPath.row]
+            let character = characterListViewModel.characters[indexPath.row]
             if character.image == nil {
-                imageDataController.fetchImage(for: character)
+                characterListViewModel.imageDataController.fetchImage(for: character)
             }
-        }
-    }
-
-    // MARK: - Character Data Controller delegate function(s)
-
-    func didFetchCharacters(characters: [Character]) {
-        print("Characters fetched! \(characters.count)")
-        DispatchQueue.main.async { [weak self] in
-            self?.characters = characters
-            self?.tableView.reloadData()
         }
     }
 
     // MARK: - Character Image Data Controller delegate function(s)
 
     func didFetchImage(for character: Character, image: UIImage?) {
-        guard let index = characters.firstIndex(where: { char -> Bool in
+        guard let index = characterListViewModel.characters.firstIndex(where: { char -> Bool in
             return character == char
         }) else { return }
 
-        characters[index].image = image
+        characterListViewModel.characters[index].image = image
 
         DispatchQueue.main.async {
             let cell = self.tableView(self.tableView, cellForRowAt: IndexPath(row: index, section: 0)) as? CharacterTableViewCell
             cell?.activityIndicatorView.isHidden = true
             self.tableView.reloadRows(at: [IndexPath(row: index, section: 0)], with: .automatic)
+        }
+    }
+
+    func didFetchCharacters(characters: [Character]) {
+        characterListViewModel.characters = characters
+        DispatchQueue.main.async { [weak self] in
+            self?.tableView.reloadData()
         }
     }
 }
