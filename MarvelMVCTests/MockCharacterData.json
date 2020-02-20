@@ -1,0 +1,47 @@
+{
+	"code": 200,
+	"status": "Ok",
+	"copyright": "© 2020 MARVEL",
+	"attributionText": "Data provided by Marvel. © 2020 MARVEL",
+	"attributionHTML": "<a href=\"http://marvel.com\">Data provided by Marvel. © 2020 MARVEL</a>",
+	"etag": "c3946f2fcf0171490ebfe99f7465a3299731cbca",
+	"data": {
+		"offset": 0,
+		"limit": 25,
+		"total": 1493,
+		"count": 2,
+		"results": [{
+			"id": 12345,
+			"name": "Test Name 1",
+			"description": "",
+			"modified": "2019-10-16T16:28:05-0400",
+			"thumbnail": {
+				"path": "http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available",
+				"extension": "jpg"
+			},
+			"urls": [{
+				"type": "detail",
+				"url": "http://marvel.com/comics/characters/1017814/moon_girl_lunella_layfayette?utm_campaign=apiRef&utm_source=ff3d4847092294acc724123682af904b"
+			}, {
+				"type": "comiclink",
+				"url": "http://marvel.com/comics/characters/1017814/moon_girl_lunella_layfayette?utm_campaign=apiRef&utm_source=ff3d4847092294acc724123682af904b"
+			}]
+		}, {
+			"id": 67890,
+			"name": "Test Name 2",
+			"description": "",
+			"modified": "2019-07-16T13:37:55-0400",
+			"thumbnail": {
+				"path": "http://i.annihil.us/u/prod/marvel/i/mg/c/90/54edf8eb8f102",
+				"extension": "jpg"
+			},
+			"urls": [{
+				"type": "detail",
+				"url": "http://marvel.com/characters/3456/spider-gwen?utm_campaign=apiRef&utm_source=ff3d4847092294acc724123682af904b"
+			}, {
+				"type": "comiclink",
+				"url": "http://marvel.com/comics/characters/1017603/spider-gwen_spider-gwen?utm_campaign=apiRef&utm_source=ff3d4847092294acc724123682af904b"
+			}]
+		}]
+	}
+}

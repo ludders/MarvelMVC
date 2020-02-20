@@ -11,19 +11,19 @@ import UIKit
 
 protocol CharacterListViewModelProtocol {
     var characters: [Character] { get set }
-    var dataController: CharacterDataControllable { get set }
-    var imageDataController: CharacterImageDataControllable { get set }
+    var dataController: CharacterDataServiceProtocol { get set }
+    var imageDataController: CharacterImageDataServiceProtocol { get set }
 }
 
 class CharacterListViewModel: CharacterListViewModelProtocol {
 
     var characters: [Character]
-    var dataController: CharacterDataControllable
-    var imageDataController: CharacterImageDataControllable
+    var dataController: CharacterDataServiceProtocol
+    var imageDataController: CharacterImageDataServiceProtocol
 
     init(characters: [Character] = [Character](),
-         dataController: CharacterDataControllable = CharacterDataController(),
-         imageDataController: CharacterImageDataControllable = CharacterImageDataController()) {
+         dataController: CharacterDataServiceProtocol = CharacterDataService(),
+         imageDataController: CharacterImageDataServiceProtocol = CharacterImageDataService()) {
 
         self.characters = characters
         self.dataController = dataController

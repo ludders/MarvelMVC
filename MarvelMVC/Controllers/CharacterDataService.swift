@@ -9,32 +9,48 @@
 import Foundation
 import UIKit
 
-protocol CharacterDataControllable {
+protocol CharacterDataServiceProtocol {
     var characters: [Character] { get set }
-    var delegate: CharacterDataControllerDelegate? { get set }
+    var delegate: CharacterDataServiceDelegate? { get set }
     func fetchCharacters()
 }
 
-protocol CharacterDataControllerDelegate {
-    func didFetchCharacters(characters: [Character])
+protocol CharacterDataServiceDelegate {
+    func didFetchCharacters(characters: [Character]?, error: Error?)
 }
 
-class CharacterDataController: NSObject, CharacterDataControllable {
+class CharacterDataService: NSObject, CharacterDataServiceProtocol {
     var characters = [Character]()
-    var delegate: CharacterDataControllerDelegate?
+    var delegate: CharacterDataServiceDelegate?
+    var urlSession: URLSession
+
+    required init(urlSession: URLSession = URLSession.shared) {
+        self.urlSession = urlSession
+    }
 
     func fetchCharacters() {
         let url = URL(string: "https://gateway.marvel.com/v1/public/characters?ts=1&apikey=ff3d4847092294acc724123682af904b&hash=412b0d63f1d175474216fadfcc4e4fed&limit=25&orderBy=-modified")!
         let request = URLRequest(url: url)
-        let task = URLSession.shared.dataTask(with: request) { jsonData, response, error in
+        let task = urlSession.dataTask(with: request) { jsonData, response, error in
             if let error = error {
-                print(error)
+                self.delegate?.didFetchCharacters(characters: nil, error: error)
+                return
             }
-            guard let httpResponse = response as? HTTPURLResponse,
-                (200...299).contains(httpResponse.statusCode) else {
-                    print("Invalid Character API response")
-                    return
+            guard let httpResponse = response as? HTTPURLResponse else {
+                let error = NSError(domain: "",
+                                    code: 0,
+                                    userInfo: ["localizedDescription": "Unexpected response type recieved"])
+                self.delegate?.didFetchCharacters(characters: nil, error: error)
+                return
             }
+            if !(200...299).contains(httpResponse.statusCode) {
+                let error = NSError(domain: "",
+                                    code: httpResponse.statusCode,
+                                    userInfo: ["localizedDescription": "HTTP Status Error \(httpResponse.statusCode)"])
+                self.delegate?.didFetchCharacters(characters: self.characters, error: error)
+                return
+            }
+
             if let mimeType = httpResponse.mimeType, mimeType == "application/json",
                 let jsonData = jsonData {
 
@@ -44,7 +60,7 @@ class CharacterDataController: NSObject, CharacterDataControllable {
                     for character in characterData {
                         self.createCharacter(for: character)
                     }
-                    self.delegate?.didFetchCharacters(characters: self.characters)
+                    self.delegate?.didFetchCharacters(characters: self.characters, error: nil)
                 }
             }
         }

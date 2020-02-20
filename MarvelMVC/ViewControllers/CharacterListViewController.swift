@@ -8,7 +8,7 @@
 
 import UIKit
 
-class CharacterListViewController: UITableViewController, UITableViewDataSourcePrefetching, CharacterDataControllerDelegate, CharacterImageDataControllerDelegate {
+class CharacterListViewController: UITableViewController, UITableViewDataSourcePrefetching, CharacterDataServiceDelegate, CharacterImageDataServiceDelegate {
 
     var characterListViewModel: CharacterListViewModelProtocol = CharacterListViewModel()
     var defaultCharacterImage: UIImage? = UIImage(named: "characterDefault")
@@ -90,7 +90,8 @@ class CharacterListViewController: UITableViewController, UITableViewDataSourceP
         }
     }
 
-    func didFetchCharacters(characters: [Character]) {
+    func didFetchCharacters(characters: [Character]?, error: Error?) {
+        guard let characters = characters else { return }
         characterListViewModel.characters = characters
         DispatchQueue.main.async { [weak self] in
             self?.tableView.reloadData()

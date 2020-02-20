@@ -9,20 +9,20 @@
 import Foundation
 import UIKit
 
-protocol CharacterImageDataControllable {
+protocol CharacterImageDataServiceProtocol {
     var defaultImage: UIImage? { get set }
-    var delegate: CharacterImageDataControllerDelegate? { get set }
+    var delegate: CharacterImageDataServiceDelegate? { get set }
     func fetchImage(for character: Character)
 }
 
-protocol CharacterImageDataControllerDelegate {
+protocol CharacterImageDataServiceDelegate {
     func didFetchImage(for character: Character, image: UIImage?)
 }
 
-class CharacterImageDataController: CharacterImageDataControllable {
+class CharacterImageDataService: CharacterImageDataServiceProtocol {
 
     var defaultImage: UIImage?
-    var delegate: CharacterImageDataControllerDelegate?
+    var delegate: CharacterImageDataServiceDelegate?
 
     func fetchImage(for character: Character) {
 
