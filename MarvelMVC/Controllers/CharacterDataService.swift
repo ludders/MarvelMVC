@@ -22,7 +22,7 @@ protocol CharacterDataServiceDelegate {
 class CharacterDataService: NSObject, CharacterDataServiceProtocol {
     var characters = [Character]()
     var delegate: CharacterDataServiceDelegate?
-    var urlSession: URLSession
+    private let urlSession: URLSession
 
     required init(urlSession: URLSession = URLSession.shared) {
         self.urlSession = urlSession
