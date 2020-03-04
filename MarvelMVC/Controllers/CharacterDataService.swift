@@ -72,34 +72,3 @@ class CharacterDataService: NSObject, CharacterDataServiceProtocol {
         self.characters.append(character)
     }
 }
-
-final class NetworkErrors: NSError {
-
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
-    static func unexpectedResponseType() -> NSError {
-        return NSError(domain: "",
-                       code: 0,
-                       userInfo: ["localizedDescription": "Unexpected response type recieved"])
-    }
-
-    static func httpStatusError(statusCode: Int) -> NSError {
-        return NSError(domain: "",
-                       code: statusCode,
-                       userInfo: ["localizedDescription": "HTTP Status Error \(statusCode)"])
-    }
-
-    static func unexpectedMIMEType(mimeType: String) -> NSError {
-        return NSError(domain: "",
-                       code: 0,
-                       userInfo: ["localizedDescription": "Unexpected response MIME type: \(mimeType)"])
-    }
-
-    static func dataDecodeError() -> NSError {
-        return NSError(domain: "",
-                       code: 0,
-                       userInfo: ["localizedDescription": "Failed to decode response data"])
-    }
-}

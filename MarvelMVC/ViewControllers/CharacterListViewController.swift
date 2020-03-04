@@ -8,7 +8,7 @@
 
 import UIKit
 
-class CharacterListViewController: UITableViewController, UITableViewDataSourcePrefetching, CharacterDataServiceDelegate, CharacterImageDataServiceDelegate {
+class CharacterListViewController: UITableViewController, UITableViewDataSourcePrefetching, CharacterDataServiceDelegate {
 
     var characterListViewModel: CharacterListViewModelProtocol = CharacterListViewModel()
     var defaultCharacterImage: UIImage? = UIImage(named: "characterDefault")
@@ -19,7 +19,7 @@ class CharacterListViewController: UITableViewController, UITableViewDataSourceP
     }
 
     required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        return nil
     }
 
     override func viewDidLoad() {
@@ -27,10 +27,9 @@ class CharacterListViewController: UITableViewController, UITableViewDataSourceP
         navigationController?.navigationBar.prefersLargeTitles = true
         navigationItem.title = "Characters"
         tableView.register(CharacterTableViewCell.self, forCellReuseIdentifier: "CharacterTableViewCell")
-        characterListViewModel.imageDataController.defaultImage = defaultCharacterImage
-        characterListViewModel.dataController.delegate = self
-        characterListViewModel.imageDataController.delegate = self
-        characterListViewModel.dataController.fetchCharacters()
+        characterListViewModel.imageDataService.defaultImage = defaultCharacterImage
+        characterListViewModel.dataService.delegate = self
+        characterListViewModel.dataService.fetchCharacters()
     }
 
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -50,12 +49,31 @@ class CharacterListViewController: UITableViewController, UITableViewDataSourceP
 
         let character = characterListViewModel.characters[indexPath.row]
         if character.image == nil {
-            characterListViewModel.imageDataController.fetchImage(for: character)
+            fetchCharacterImageAndUpdateTableRow(character: character, indexPathForRow: indexPath)
         }
         cell.configure(with: character)
 
         return cell
     }
+
+    func fetchCharacterImageAndUpdateTableRow(character: Character, indexPathForRow indexPath: IndexPath) {
+        characterListViewModel.imageDataService.fetchImage(for: character, onSuccess: { image in
+            self.characterListViewModel.characters[indexPath.row].image = image
+            self.updateTableRow(for: character)
+        }, onFailure: { error in
+            print(error)
+        })
+    }
+
+    func updateTableRow(for character: Character) {
+        if let row = self.characterListViewModel.characters.firstIndex(of: character) {
+            let indexPath = IndexPath(row: row, section: 0)
+            DispatchQueue.main.async {
+                self.tableView.reloadRows(at: [indexPath], with: .automatic)
+            }
+        }
+    }
+
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let character = characterListViewModel.characters[indexPath.row]
@@ -69,26 +87,16 @@ class CharacterListViewController: UITableViewController, UITableViewDataSourceP
         for indexPath in indexPaths {
             let character = characterListViewModel.characters[indexPath.row]
             if character.image == nil {
-                characterListViewModel.imageDataController.fetchImage(for: character)
+                characterListViewModel.imageDataService.fetchImage(for: character, onSuccess: { [weak self] image in
+                    self?.characterListViewModel.characters[indexPath.row].image = image
+                }) { error in
+                    print(error)
+                }
             }
         }
     }
 
-    // MARK: - Character Image Data Controller delegate function(s)
-
-    func didFetchImage(for character: Character, image: UIImage?) {
-        guard let index = characterListViewModel.characters.firstIndex(where: { char -> Bool in
-            return character == char
-        }) else { return }
-
-        characterListViewModel.characters[index].image = image
-
-        DispatchQueue.main.async {
-            let cell = self.tableView(self.tableView, cellForRowAt: IndexPath(row: index, section: 0)) as? CharacterTableViewCell
-            cell?.activityIndicatorView.isHidden = true
-            self.tableView.reloadRows(at: [IndexPath(row: index, section: 0)], with: .automatic)
-        }
-    }
+    // MARK: - Character Data Service delegate function(s)
 
     func didFetchCharacters(characters: [Character]?, error: Error?) {
         guard let characters = characters else { return }

@@ -21,7 +21,7 @@ class CharacterImageDataServiceV2: CharacterImageDataServiceProtocolV2 {
     var defaultImage: UIImage?
     private let urlSession: URLSession
 
-    required init(urlSession: URLSession = URLSession.shared) {
+    required init(urlSession: URLSession = URLSession.shared, defaultImage: UIImage? = nil) {
         self.urlSession = urlSession
     }
 

@@ -6,6 +6,8 @@
 //  Copyright © 2019 David Ludlow. All rights reserved.
 //
 
+//TODO: Fix constraint issues (Image View)
+
 import UIKit
 
 class DetailViewController: UIViewController {

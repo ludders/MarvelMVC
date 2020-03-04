@@ -22,6 +22,13 @@ class CharacterTableViewCell: UITableViewCell {
         contentView.addSubview(textView)
         contentView.addSubview(activityIndicatorView)
 
+        configureImageContainerView()
+        configureCharacterImageView(withImage: character.image)
+        configureActivityIndicatorView()
+        configureTextView(withText: character.name)
+    }
+
+    private func configureImageContainerView() {
         imageContainerView.translatesAutoresizingMaskIntoConstraints = false
 
         let imageContainerViewConstraints: [NSLayoutConstraint] = [
@@ -31,9 +38,11 @@ class CharacterTableViewCell: UITableViewCell {
             imageContainerView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 5)
         ]
         NSLayoutConstraint.activate(imageContainerViewConstraints)
+    }
 
+    private func configureCharacterImageView(withImage image: UIImage?) {
         characterImageView.translatesAutoresizingMaskIntoConstraints = false
-        characterImageView.image = character.image
+        characterImageView.image = image
         characterImageView.contentMode = .scaleToFill
 
         let characterImageViewConstraints: [NSLayoutConstraint] = [
@@ -43,9 +52,10 @@ class CharacterTableViewCell: UITableViewCell {
             characterImageView.topAnchor.constraint(equalTo: imageContainerView.topAnchor)
         ]
         NSLayoutConstraint.activate(characterImageViewConstraints)
+    }
 
+    private func configureActivityIndicatorView() {
         activityIndicatorView.color = UIColor.red
-
         activityIndicatorView.translatesAutoresizingMaskIntoConstraints = false
 
         let activityIndicatorViewConstraints: [NSLayoutConstraint] = [
@@ -62,8 +72,10 @@ class CharacterTableViewCell: UITableViewCell {
         } else{
             activityIndicatorView.stopAnimating()
         }
-        
-        textView.text = character.name
+    }
+
+    private func configureTextView(withText name: String?) {
+        textView.text = name
         textView.font = UIFont.systemFont(ofSize: 15)
         textView.translatesAutoresizingMaskIntoConstraints = false
 
@@ -73,6 +85,5 @@ class CharacterTableViewCell: UITableViewCell {
             textView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
         ]
         NSLayoutConstraint.activate(textViewConstraints)
-
     }
 }
