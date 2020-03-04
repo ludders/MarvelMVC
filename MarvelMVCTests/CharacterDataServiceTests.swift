@@ -17,7 +17,7 @@ class CharacterDataControllerTests: XCTestCase {
 
     func testFetchCharactersWithSuccessfulResponse() {
         let data = MockResourceDataProvider.data(fromFile: "MockCharacterData", ofType: ".json")
-        let response = MockHTTPURLResponseFactory.successResponse
+        let response = MockHTTPURLResponseFactory.successJSONResponse
         mockURLSession = MockURLSession(mockData: data,
                                         mockResponse: response,
                                         mockError: nil)
@@ -30,11 +30,11 @@ class CharacterDataControllerTests: XCTestCase {
     }
 
     func testFetchCharactersWithUnsuccessfulResponse() {
-        let response = MockHTTPURLResponseFactory.failureResponse
+        let response = MockHTTPURLResponseFactory.failureJSONResponse
         mockURLSession = MockURLSession(mockData: nil,
                                         mockResponse: response,
                                         mockError: nil)
-        let expectedError = NSError(domain: "", code: 500, userInfo: ["localizedDescription": "HTTP Status Error 500"])
+        let expectedError = NetworkErrors.httpStatusError(statusCode: 500)
 
         subject = CharacterDataService(urlSession: mockURLSession)
         subject.delegate = mockDelegate
@@ -59,9 +59,7 @@ class CharacterDataControllerTests: XCTestCase {
         mockURLSession = MockURLSession(mockData: nil,
                                         mockResponse: response,
                                         mockError: nil)
-        let expectedError = NSError(domain: "",
-                                    code: 0,
-                                    userInfo: ["localizedDescription": "Unexpected response type recieved"])
+        let expectedError = NetworkErrors.unexpectedResponseType()
 
         subject = CharacterDataService(urlSession: mockURLSession)
         subject.delegate = mockDelegate

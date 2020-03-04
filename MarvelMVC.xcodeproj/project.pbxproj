@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9D0F09072405CD20000530E1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9DE05BF92381E3FB0061AC2E /* Assets.xcassets */; };
 		9D198577238AE05500EC4CC9 /* Character.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D198576238AE05500EC4CC9 /* Character.swift */; };
 		9D19886F238B0F6400EC4CC9 /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D19886E238B0F6400EC4CC9 /* DetailViewController.swift */; };
 		9D229D16239932F9002DBB97 /* CharacterImageDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D229D15239932F9002DBB97 /* CharacterImageDataService.swift */; };
@@ -153,6 +154,7 @@
 		9D5ABAFF23FE797400D47489 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				9D5ABB0023FE799400D47489 /* MockCharacterData.json */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -218,7 +220,6 @@
 		9DE05C062381E3FC0061AC2E /* MarvelMVCTests */ = {
 			isa = PBXGroup;
 			children = (
-				9D5ABB0023FE799400D47489 /* MockCharacterData.json */,
 				9D5ABAFF23FE797400D47489 /* Resources */,
 				9DD007B223FC3D7900DF4553 /* Mocks */,
 				9DE05C092381E3FC0061AC2E /* Info.plist */,
@@ -351,6 +352,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9D0F09072405CD20000530E1 /* Assets.xcassets in Resources */,
 				9D5ABB0123FE799400D47489 /* MockCharacterData.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

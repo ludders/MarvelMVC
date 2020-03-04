@@ -37,17 +37,13 @@ class CharacterDataService: NSObject, CharacterDataServiceProtocol {
                 return
             }
             guard let httpResponse = response as? HTTPURLResponse else {
-                let error = NSError(domain: "",
-                                    code: 0,
-                                    userInfo: ["localizedDescription": "Unexpected response type recieved"])
-                self.delegate?.didFetchCharacters(characters: nil, error: error)
+                self.delegate?.didFetchCharacters(characters: nil,
+                                                  error: NetworkErrors.unexpectedResponseType())
                 return
             }
             if !(200...299).contains(httpResponse.statusCode) {
-                let error = NSError(domain: "",
-                                    code: httpResponse.statusCode,
-                                    userInfo: ["localizedDescription": "HTTP Status Error \(httpResponse.statusCode)"])
-                self.delegate?.didFetchCharacters(characters: self.characters, error: error)
+                self.delegate?.didFetchCharacters(characters: self.characters,
+                                                  error: NetworkErrors.httpStatusError(statusCode: httpResponse.statusCode))
                 return
             }
 
@@ -74,5 +70,36 @@ class CharacterDataService: NSObject, CharacterDataServiceProtocol {
         }
         let character = Character(name: result.name, description: result.description, imageURL: imageURL, image: nil)
         self.characters.append(character)
+    }
+}
+
+final class NetworkErrors: NSError {
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    static func unexpectedResponseType() -> NSError {
+        return NSError(domain: "",
+                       code: 0,
+                       userInfo: ["localizedDescription": "Unexpected response type recieved"])
+    }
+
+    static func httpStatusError(statusCode: Int) -> NSError {
+        return NSError(domain: "",
+                       code: statusCode,
+                       userInfo: ["localizedDescription": "HTTP Status Error \(statusCode)"])
+    }
+
+    static func unexpectedMIMEType(mimeType: String) -> NSError {
+        return NSError(domain: "",
+                       code: 0,
+                       userInfo: ["localizedDescription": "Unexpected response MIME type: \(mimeType)"])
+    }
+
+    static func dataDecodeError() -> NSError {
+        return NSError(domain: "",
+                       code: 0,
+                       userInfo: ["localizedDescription": "Failed to decode response data"])
     }
 }

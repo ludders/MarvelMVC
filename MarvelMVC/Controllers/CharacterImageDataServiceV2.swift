@@ -11,53 +11,53 @@ import UIKit
 
 protocol CharacterImageDataServiceProtocolV2 {
     var defaultImage: UIImage? { get set }
-    func fetchImage(for character: Character, onSuccess: @escaping (UIImage?) -> Void, onFailure: @escaping (Error) -> ())
+    func fetchImage(for character: Character,
+                    onSuccess: ((UIImage?) -> ())?,
+                    onFailure: ((Error) -> ())?)
 }
 
 class CharacterImageDataServiceV2: CharacterImageDataServiceProtocolV2 {
 
     var defaultImage: UIImage?
-    var urlSession: URLSession
+    private let urlSession: URLSession
 
     required init(urlSession: URLSession = URLSession.shared) {
         self.urlSession = urlSession
     }
 
-    func fetchImage(for character: Character, onSuccess: @escaping (UIImage?) -> Void, onFailure: @escaping (Error) -> ()) {
+    func fetchImage(for character: Character, onSuccess: ((UIImage?) -> Void)?, onFailure: ((Error) -> ())?) {
 
         guard let urlString = character.imageURL,
             let url = URL(string: urlString) else {
-                onSuccess(defaultImage)
+                onSuccess?(defaultImage)
                 return
         }
 
         let task = urlSession.dataTask(with: url) { data, response, error in
+
             if let error = error {
-                onFailure(error)
+                onFailure?(error)
+                return
             }
-
             guard let httpResponse = response as? HTTPURLResponse else {
-                let error = NSError(domain: "",
-                                    code: 0,
-                                    userInfo: ["localizedDescription": "Unexpected response type recieved"])
-                onFailure(error)
+                onFailure?(NetworkErrors.unexpectedResponseType())
                 return
             }
-
             guard (200...299).contains(httpResponse.statusCode) else {
-                let error = NSError(domain: "",
-                                    code: httpResponse.statusCode,
-                                    userInfo: ["localizedDescription": "HTTP Status Error \(httpResponse.statusCode)"])
-                onFailure(error)
+                onFailure?(NetworkErrors.httpStatusError(statusCode: httpResponse.statusCode))
                 return
             }
-
-            if let mimeType = httpResponse.mimeType,
-                mimeType.hasPrefix("image/"),
-                let imageData = data {
-
+            if let mimeType = httpResponse.mimeType {
+                guard mimeType.hasPrefix("image/") else {
+                    onFailure?(NetworkErrors.unexpectedMIMEType(mimeType: mimeType))
+                    return
+                }
+                guard let imageData = data else {
+                    onFailure?(NetworkErrors.dataDecodeError())
+                    return
+                }
                 let image = UIImage(data: imageData)
-                onSuccess(image)
+                onSuccess?(image)
             }
         }
         task.resume()

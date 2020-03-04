@@ -9,7 +9,7 @@
 import Foundation
 
 class MockHTTPURLResponseFactory {
-    static var successResponse: HTTPURLResponse {
+    static var successJSONResponse: HTTPURLResponse {
         let response = HTTPURLResponse(url: URL(fileURLWithPath: ""),
                                        statusCode: 200,
                                        httpVersion: nil,
@@ -17,9 +17,33 @@ class MockHTTPURLResponseFactory {
         return response!
     }
 
-    static var failureResponse: HTTPURLResponse {
+    static var failureJSONResponse: HTTPURLResponse {
         let response = HTTPURLResponse(url: URL(fileURLWithPath: ""),
                                        statusCode: 500,
+                                       httpVersion: nil,
+                                       headerFields: ["Content-Type": "application/json"])
+        return response!
+    }
+
+    static var successImageResponse: HTTPURLResponse {
+        let response = HTTPURLResponse(url: URL(fileURLWithPath: "http://test.com/test.jpg"),
+                                       statusCode: 200,
+                                       httpVersion: nil,
+                                       headerFields: ["Content-Type": "image/jpeg"])
+        return response!
+    }
+
+    static var failureImageResponse: HTTPURLResponse {
+        let response = HTTPURLResponse(url: URL(fileURLWithPath: "http://test.com/test.jpg"),
+                                       statusCode: 500,
+                                       httpVersion: nil,
+                                       headerFields: ["Content-Type": "image/jpeg"])
+        return response!
+    }
+
+    static var failureImageMIMEResponse: HTTPURLResponse {
+        let response = HTTPURLResponse(url: URL(fileURLWithPath: "http://test.com/test.json"),
+                                       statusCode: 200,
                                        httpVersion: nil,
                                        headerFields: ["Content-Type": "application/json"])
         return response!
