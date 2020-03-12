@@ -9,7 +9,11 @@
 import Foundation
 import UIKit
 
-class CharacterListCoordinator: Coordinator {
+protocol CharacterListCoordinatorProtocol : Coordinator {
+    func showCharacterDetails(character: Character)
+}
+
+class CharacterListCoordinator: CharacterListCoordinatorProtocol {
 
     var childCoordinators: [Coordinator] = []
     var navigationController: UINavigationController
@@ -23,8 +27,12 @@ class CharacterListCoordinator: Coordinator {
     }
 
     func start() {
-        let viewController = CharacterListViewController(characterListViewModel: viewModel)
+        let viewController = CharacterListViewController(characterListViewModel: viewModel, coordinator: self)
+        navigationController.pushViewController(viewController, animated: true)
+    }
+
+    func showCharacterDetails(character: Character) {
+        let viewController = DetailViewController(character: character)
         navigationController.pushViewController(viewController, animated: true)
     }
 }
-

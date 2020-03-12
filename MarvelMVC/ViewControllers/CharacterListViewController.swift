@@ -10,11 +10,15 @@ import UIKit
 
 class CharacterListViewController: UITableViewController, UITableViewDataSourcePrefetching, CharacterDataServiceDelegate {
 
-    var characterListViewModel: CharacterListViewModelProtocol = CharacterListViewModel()
+    var coordinator: CharacterListCoordinatorProtocol
+    var characterListViewModel: CharacterListViewModelProtocol
     var defaultCharacterImage: UIImage? = UIImage(named: "characterDefault")
+    var mainDispatcher: Dispatcher = MainDispatcher()
 
-    init(characterListViewModel: CharacterListViewModelProtocol = CharacterListViewModel()) {
+    init(characterListViewModel: CharacterListViewModelProtocol = CharacterListViewModel(),
+         coordinator: CharacterListCoordinatorProtocol) {
         self.characterListViewModel = characterListViewModel
+        self.coordinator = coordinator
         super.init(nibName: nil, bundle: Bundle.main)
     }
 
@@ -68,17 +72,15 @@ class CharacterListViewController: UITableViewController, UITableViewDataSourceP
     func updateTableRow(for character: Character) {
         if let row = self.characterListViewModel.characters.firstIndex(of: character) {
             let indexPath = IndexPath(row: row, section: 0)
-            DispatchQueue.main.async {
+            mainDispatcher.async {
                 self.tableView.reloadRows(at: [indexPath], with: .automatic)
             }
         }
     }
 
-
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let character = characterListViewModel.characters[indexPath.row]
-        let detailCoordinator = DetailCoordinator(navigationController: navigationController!, character: character)
-        detailCoordinator.start()
+        coordinator.showCharacterDetails(character: character)
     }
 
     // MARK: - Table view data source prefetching function(s)
@@ -96,13 +98,13 @@ class CharacterListViewController: UITableViewController, UITableViewDataSourceP
         }
     }
 
-    // MARK: - Character Data Service delegate function(s)
+    // MARK: - Character Data Service delegate function(s
 
     func didFetchCharacters(characters: [Character]?, error: Error?) {
         guard let characters = characters else { return }
         characterListViewModel.characters = characters
-        DispatchQueue.main.async { [weak self] in
-            self?.tableView.reloadData()
+        mainDispatcher.async {
+            self.tableView.reloadData()
         }
     }
 }

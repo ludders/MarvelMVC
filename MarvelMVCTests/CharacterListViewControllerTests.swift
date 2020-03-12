@@ -15,6 +15,7 @@ class CharacterListViewControllerTests: XCTestCase {
     var subject: CharacterListViewController!
     var mockViewModel: MockCharacterListViewModel!
     var mockCharacterImageDataService: MockCharacterImageDataService!
+    var mockCoordinator: MockCharacterListCoordinator!
     var testImage = UIImage(named: "blank")
     var testImage2 = UIImage(named: "characterDefault")
     
@@ -22,7 +23,8 @@ class CharacterListViewControllerTests: XCTestCase {
     override func setUp() {
         mockCharacterImageDataService = MockCharacterImageDataService()
         mockViewModel = MockCharacterListViewModel(imageDataService: mockCharacterImageDataService)
-        subject = CharacterListViewController(characterListViewModel: mockViewModel)
+        mockCoordinator = MockCharacterListCoordinator()
+        subject = CharacterListViewController(characterListViewModel: mockViewModel, coordinator: mockCoordinator)
     }
 
     func testInitWithCoderReturnsNil() {
@@ -102,5 +104,50 @@ class CharacterListViewControllerTests: XCTestCase {
         XCTWaiter.wait(for: [mockCharacterImageDataService.fetchImageExpectation], timeout: 1)
 
         XCTAssert((actualImage == testImage) && (actualImage2 == testImage))
+    }
+
+    func testUpdateTableRowCallsReloadRowsWithExpectedCharacterIndexPath() {
+        let mockCharacter = Character(name: "Test", description: "Description", imageURL: "www.blah.com/test.jpg", image: nil)
+        let mockCharacter2 = Character(name: "Test2", description: "Description2", imageURL: "www.blah.com/test2.jpg", image: nil)
+        let mockDispatcher = MockDispatcher()
+        let mockTableVIew = MockUITableView()
+
+        subject.characterListViewModel.characters = [mockCharacter, mockCharacter2]
+        subject.mainDispatcher = mockDispatcher
+        subject.tableView = mockTableVIew
+        subject.updateTableRow(for: mockCharacter2)
+
+        let expectedIndexPath = IndexPath(row: 1, section: 0)
+        XCTAssert(mockTableVIew.reloadRowsCalled)
+        XCTAssert(mockTableVIew.indexPathsUsed == [expectedIndexPath])
+    }
+
+    func testDidSelectRowAtStartsCharacterListCoordinator() {
+        let mockCharacter = Character(name: "Test", description: "Description", imageURL: "www.blah.com/test.jpg", image: nil)
+        let mockCharacter2 = Character(name: "Test2", description: "Description2", imageURL: "www.blah.com/test2.jpg", image: nil)
+
+        subject.characterListViewModel.characters = [mockCharacter, mockCharacter2]
+        subject.coordinator = mockCoordinator
+
+        let indexPath = IndexPath(row: 1, section: 0)
+        subject.tableView(subject.tableView, didSelectRowAt: indexPath)
+        XCTAssert(mockCoordinator.showCharacterDetailsCalled)
+        XCTAssertEqual(mockCoordinator.characterPassed, mockCharacter2)
+    }
+
+    func testDidFetchCharactersUpdatesViewModelAndReloadsTableView() {
+        let mockCharacter = Character(name: "Test", description: "Description", imageURL: "www.blah.com/test.jpg", image: nil)
+        let mockCharacter2 = Character(name: "Test2", description: "Description2", imageURL: "www.blah.com/test2.jpg", image: nil)
+        let mockTableView = MockUITableView()
+        let mockDispatcher = MockDispatcher()
+
+        subject.characterListViewModel.characters = []
+        subject.tableView = mockTableView
+        subject.mainDispatcher = mockDispatcher
+
+        let expectedCharacters = [mockCharacter, mockCharacter2]
+        subject.didFetchCharacters(characters: [mockCharacter, mockCharacter2], error: nil)
+
+        XCTAssert(subject.characterListViewModel.characters == expectedCharacters)
     }
 }
