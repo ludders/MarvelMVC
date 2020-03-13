@@ -26,7 +26,6 @@
 		9D9D09F823E76C74005130F1 /* CharacterTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D9D09F723E76C74005130F1 /* CharacterTableViewCell.swift */; };
 		9D9FE09824005908001C0038 /* CharacterImageDataServiceV2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D9FE09724005908001C0038 /* CharacterImageDataServiceV2.swift */; };
 		9D9FE09A24006011001C0038 /* CharacterImageDataServiceV2Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D9FE09924006011001C0038 /* CharacterImageDataServiceV2Tests.swift */; };
-		9DCB423E24193D56005E80A0 /* MockDispatchQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DCB423D24193D56005E80A0 /* MockDispatchQueue.swift */; };
 		9DCB424024194369005E80A0 /* Dispatcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DCB423F24194369005E80A0 /* Dispatcher.swift */; };
 		9DCB424224195415005E80A0 /* MockCharacterListCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DCB424124195415005E80A0 /* MockCharacterListCoordinator.swift */; };
 		9DCE29BB24192AA500722ADC /* MockUITableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DCE29BA24192AA500722ADC /* MockUITableView.swift */; };
@@ -79,7 +78,6 @@
 		9D9D09F723E76C74005130F1 /* CharacterTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterTableViewCell.swift; sourceTree = "<group>"; };
 		9D9FE09724005908001C0038 /* CharacterImageDataServiceV2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterImageDataServiceV2.swift; sourceTree = "<group>"; };
 		9D9FE09924006011001C0038 /* CharacterImageDataServiceV2Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterImageDataServiceV2Tests.swift; sourceTree = "<group>"; };
-		9DCB423D24193D56005E80A0 /* MockDispatchQueue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockDispatchQueue.swift; sourceTree = "<group>"; };
 		9DCB423F24194369005E80A0 /* Dispatcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dispatcher.swift; sourceTree = "<group>"; };
 		9DCB424124195415005E80A0 /* MockCharacterListCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockCharacterListCoordinator.swift; sourceTree = "<group>"; };
 		9DCE29BA24192AA500722ADC /* MockUITableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockUITableView.swift; sourceTree = "<group>"; };
@@ -200,7 +198,6 @@
 			isa = PBXGroup;
 			children = (
 				9DD007B423FC3D9A00DF4553 /* MockCharacterDataServiceDelegate.swift */,
-				9DCB423D24193D56005E80A0 /* MockDispatchQueue.swift */,
 				9D727F1A241128490094D0FC /* MockCharacterListViewModel.swift */,
 				9D727F1C2411292A0094D0FC /* MockCharacterDataService.swift */,
 				9D727F1E24112A2A0094D0FC /* MockCharacterImageDataService.swift */,
@@ -435,7 +432,6 @@
 				9D5ABE5F23FE8DAC00D47489 /* MockResponseFactory.swift in Sources */,
 				9D727F19241127A00094D0FC /* CharacterListViewControllerTests.swift in Sources */,
 				9DCB424224195415005E80A0 /* MockCharacterListCoordinator.swift in Sources */,
-				9DCB423E24193D56005E80A0 /* MockDispatchQueue.swift in Sources */,
 				9DD007B523FC3D9A00DF4553 /* MockCharacterDataServiceDelegate.swift in Sources */,
 				9D727F1724111E6C0094D0FC /* CharacterTableViewCellTests.swift in Sources */,
 				9DD007B123FC3BDF00DF4553 /* CharacterDataServiceTests.swift in Sources */,
