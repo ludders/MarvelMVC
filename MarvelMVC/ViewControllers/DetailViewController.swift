@@ -18,10 +18,26 @@ class DetailViewController: UIViewController {
         view.contentMode = .scaleAspectFit
         return view
     }()
-    var descriptionView: UILabel = {
+    var nameLabel: UILabel = {
         let view = UILabel(frame: CGRect.zero)
         view.numberOfLines = 0
+        view.textAlignment = .center
+        view.font = UIFont.systemFont(ofSize: 22, weight: .bold)
         return view
+    }()
+    var descriptionLabel: UILabel = {
+        let view = UILabel(frame: CGRect.zero)
+        view.numberOfLines = 0
+        view.font = UIFont.systemFont(ofSize: 18, weight: .regular)
+        return view
+    }()
+    var websiteButton: UIButton = {
+        let button = UIButton(type: UIButton.ButtonType.roundedRect)
+        button.setTitle("Go To Website", for: .normal)
+        button.tintColor = .white
+        button.backgroundColor = .blue
+        button.layer.cornerRadius = 5
+        return button
     }()
     var character: Character
 
@@ -41,12 +57,14 @@ class DetailViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        navigationItem.largeTitleDisplayMode = .never
         contentView.backgroundColor = UIColor.white
         view.addSubview(imageView)
-        view.addSubview(descriptionView)
+        view.addSubview(nameLabel)
+        view.addSubview(descriptionLabel)
+        view.addSubview(websiteButton)
         setupConstraints()
-        imageView.image = character.image
-        descriptionView.text = character.description
+        fillCharacterData()
     }
 
     func setupConstraints() {
@@ -60,14 +78,35 @@ class DetailViewController: UIViewController {
         ]
         NSLayoutConstraint.activate(imageViewConstraints)
 
-        descriptionView.translatesAutoresizingMaskIntoConstraints = false
+        nameLabel.translatesAutoresizingMaskIntoConstraints = false
+        let nameLabelConstraints: [NSLayoutConstraint] = [
+            nameLabel.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 10),
+            nameLabel.widthAnchor.constraint(equalTo: contentView.widthAnchor, constant: -20),
+            nameLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor)
+        ]
+        NSLayoutConstraint.activate(nameLabelConstraints)
+
+        descriptionLabel.translatesAutoresizingMaskIntoConstraints = false
         let descriptionViewConstraints: [NSLayoutConstraint] = [
-            descriptionView.topAnchor.constraint(equalTo: imageView.safeAreaLayoutGuide.bottomAnchor),
-            descriptionView.bottomAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.bottomAnchor, constant: -10),
-            descriptionView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            descriptionView.widthAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.widthAnchor, constant: -20),
-            descriptionView.heightAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.heightAnchor, multiplier: 0.5),
+            descriptionLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 10),
+            descriptionLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            descriptionLabel.widthAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.widthAnchor, constant: -20)
         ]
         NSLayoutConstraint.activate(descriptionViewConstraints)
+
+        websiteButton.translatesAutoresizingMaskIntoConstraints = false
+        let websiteButtonConstraints: [NSLayoutConstraint] = [
+            websiteButton.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 20),
+            websiteButton.widthAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.widthAnchor, constant: -20),
+            websiteButton.centerXAnchor.constraint(equalTo: contentView.centerXAnchor)
+        ]
+        NSLayoutConstraint.activate(websiteButtonConstraints)
+    }
+
+    func fillCharacterData() {
+        imageView.image = character.image
+        nameLabel.attributedText = NSAttributedString(string: character.name!,
+                                                      attributes: [NSAttributedString.Key.underlineStyle: NSUnderlineStyle.single.rawValue])
+        descriptionLabel.text = character.description
     }
 }
