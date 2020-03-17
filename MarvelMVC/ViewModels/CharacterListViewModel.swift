@@ -9,6 +9,12 @@
 import Foundation
 import UIKit
 
+/* I commented about { get set } elsewhere but here it's a bit too much
+ Try thinking of the protocol as the interface, then think what does the user of this protocol really need to know.
+ It needs to prompt the view model to fetch characters.
+ It needs to know when characters have been fetched so it can reload the view (closure or delegate)
+ It probably needs to see chracters but not set them. 
+ */
 protocol CharacterListViewModelProtocol {
     var characters: [Character] { get set }
     var dataService: CharacterDataServiceProtocol { get set }

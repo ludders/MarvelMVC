@@ -9,6 +9,26 @@
 import Foundation
 import UIKit
 
+// The purpose of this protocol is to allow someone to show characte details
+// So you don't necessarily need to conform to `Coordinator` too here.
+// For example, in `CharacterListViewController` you inject something that conforms to `CharacterListCoordinatorProtocol`
+// Now `CharacterListViewController` can call `start()` or `childCoordinators` on the `CharacterListCoordinatorProtocol`
+// but it doesn't really need to know that information. It only wants to `showCharacterDetails(character: Character)`
+// So more often you see this kind of setup
+/*
+protocol CharacterListViewControllerDelegate {
+    func showCharacterDetails(character: Character)
+}
+
+class CharacterListCoordinator: Coordinator {
+    ...
+}
+
+extension CharacterListCoordinator: CharacterListViewControllerDelegate {
+    func showCharacterDetails(character: Character)
+}
+ */
+
 protocol CharacterListCoordinatorProtocol : Coordinator {
     func showCharacterDetails(character: Character)
 }
@@ -36,3 +56,4 @@ class CharacterListCoordinator: CharacterListCoordinatorProtocol {
         navigationController.pushViewController(viewController, animated: true)
     }
 }
+

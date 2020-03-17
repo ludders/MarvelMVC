@@ -10,7 +10,11 @@ import Foundation
 import UIKit
 
 protocol CharacterImageDataServiceProtocolV2 {
-    var defaultImage: UIImage? { get set }
+    var defaultImage: UIImage? { get set } // do you really need the set here?
+    // less often do you see protocols exposing { get set } over just { get }
+    // because normally the internal implementation of the class manages the { set }
+    // if you expose the { set } you give other classes a chance to modify the state of your class
+    
     func fetchImage(for character: Character,
                     onSuccess: ((UIImage?) -> ())?,
                     onFailure: ((Error) -> ())?)

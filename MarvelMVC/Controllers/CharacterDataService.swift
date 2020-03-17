@@ -9,6 +9,25 @@
 import Foundation
 import UIKit
 
+/*
+ This comment is about the this DataService and the ViewModel, I think you've mixed up the two a little.
+ This class is a Data Service, really it should just fetch the characters, but it also stores the characters
+ Your view model literally just wraps the data service. I.e. the ViewModel doesn't really do anything.
+ 
+ Then you run into the viewcontroller reaching deeper into the dataServices to the do stuff:
+ 
+ characterListViewModel.imageDataService.defaultImage = defaultCharacterImage
+ characterListViewModel.dataService.delegate = self
+ characterListViewModel.dataService.fetchCharacters()
+ 
+ Really the view model should have a getCharacters function and it should delegate back to the viewController (or use closures).
+ 
+ Then, the view model would call the data service. But in a more complex implementation it may also know how to call a cache, if the characters have already been fetched.
+ The view model would also be responsible for holding the model, i.e. the characters. 
+ 
+ Watch the beginnings of this video https://www.youtube.com/watch?v=vDzIeFzGAuU, it's great for an MVC to MVVM explanation. 
+ */
+
 protocol CharacterDataServiceProtocol {
     var characters: [Character] { get set }
     var delegate: CharacterDataServiceDelegate? { get set }

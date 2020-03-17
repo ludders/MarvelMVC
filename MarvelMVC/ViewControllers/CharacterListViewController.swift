@@ -12,14 +12,14 @@ class CharacterListViewController: UITableViewController, UITableViewDataSourceP
 
     var coordinator: CharacterListCoordinatorProtocol
     var characterListViewModel: CharacterListViewModelProtocol
-    var defaultCharacterImage: UIImage? = UIImage(named: "characterDefault")
+    var defaultCharacterImage: UIImage? = UIImage(named: "characterDefault") // This could be managed by the cell, unless you're thinking the cell will be reused for other model, which would be fair in a bigger app
     var mainDispatcher: Dispatcher = MainDispatcher()
 
     init(characterListViewModel: CharacterListViewModelProtocol = CharacterListViewModel(),
          coordinator: CharacterListCoordinatorProtocol) {
         self.characterListViewModel = characterListViewModel
         self.coordinator = coordinator
-        super.init(nibName: nil, bundle: Bundle.main)
+        super.init(nibName: nil, bundle: Bundle.main) // think bundle can be nil actually
     }
 
     required init?(coder: NSCoder) {
@@ -46,6 +46,31 @@ class CharacterListViewController: UITableViewController, UITableViewDataSourceP
         return characterListViewModel.characters.count
     }
 
+    
+    /*
+     There's something a bit funny going on here :)
+     
+     When you first load the app, this method is called. Let's say for Thor.
+     The image is nil so you fetch the image.
+     The cell.configure is called for Thor while the image is fetched.
+     When the image is fetched you call this `self.tableView.reloadRows(at: [indexPath], with: .automatic)`
+     Which in turn calls this `func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell` again
+     Not the image is not nil so you don't fetch again
+     But you do configure the cell again.
+     Which is slightly suboptimal.
+     
+     Question is can you update the image on the cell without reloading the whole cell again? Yes there are a few ways
+     
+     Here's a hacky way I tried that doesn't handle you're loading view image nor any caching but still :)
+             if character.image == nil {
+                 DispatchQueue.main.async {
+                     let image = try? UIImage(data: Data(contentsOf: URL(string: character.imageURL!)!))
+                     cell.characterImageView.image = image
+                 }
+     //            fetchCharacterImageAndUpdateTableRow(character: character, indexPathForRow: indexPath)
+             }
+     
+     */
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "CharacterTableViewCell", for: indexPath) as? CharacterTableViewCell else {
             fatalError("Failed to dequeue CharacterTableViewCell from tableView")
@@ -102,7 +127,8 @@ class CharacterListViewController: UITableViewController, UITableViewDataSourceP
 
     func didFetchCharacters(characters: [Character]?, error: Error?) {
         guard let characters = characters else { return }
-        characterListViewModel.characters = characters
+        characterListViewModel.characters = characters // This should be in the ViewModel, having this here is giving the `ViewController` the responsibility of updating the `ViewModel`, that ain't right maaaan. :)
+        // This is a good example of where { get set } is giving too much flexibility and exposing too much of underlying objects.
         mainDispatcher.async {
             self.tableView.reloadData()
         }
