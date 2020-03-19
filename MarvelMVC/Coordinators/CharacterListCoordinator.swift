@@ -7,10 +7,12 @@
 //
 
 import Foundation
+import SafariServices
 import UIKit
 
 protocol CharacterListCoordinatorProtocol : Coordinator {
     func showCharacterDetails(character: Character)
+    func showWebBrowser(url: URL)
 }
 
 class CharacterListCoordinator: CharacterListCoordinatorProtocol {
@@ -32,7 +34,12 @@ class CharacterListCoordinator: CharacterListCoordinatorProtocol {
     }
 
     func showCharacterDetails(character: Character) {
-        let viewController = DetailViewController(character: character)
+        let viewController = DetailViewController(character: character, coordinator: self)
+        navigationController.pushViewController(viewController, animated: true)
+    }
+
+    func showWebBrowser(url: URL) {
+        let viewController = SFSafariViewController(url: url)
         navigationController.pushViewController(viewController, animated: true)
     }
 }

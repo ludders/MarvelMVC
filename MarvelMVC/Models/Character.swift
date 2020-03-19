@@ -14,6 +14,7 @@ struct Character: Equatable {
     var description: String?
     var imageURL: String?
     var image: UIImage?
+    var detailURL: String?
 
     static func == (lhs: Character, rhs: Character) -> Bool {
         return

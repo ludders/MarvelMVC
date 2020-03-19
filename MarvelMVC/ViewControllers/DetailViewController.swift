@@ -40,9 +40,12 @@ class DetailViewController: UIViewController {
         return button
     }()
     var character: Character
+    var websiteURL: URL?
+    var coordinator: CharacterListCoordinatorProtocol
 
-    init(character: Character) {
+    init(character: Character, coordinator: CharacterListCoordinatorProtocol) {
         self.character = character
+        self.coordinator = coordinator
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -65,6 +68,7 @@ class DetailViewController: UIViewController {
         view.addSubview(websiteButton)
         setupConstraints()
         fillCharacterData()
+        setupButton()
     }
 
     func setupConstraints() {
@@ -108,5 +112,19 @@ class DetailViewController: UIViewController {
         nameLabel.attributedText = NSAttributedString(string: character.name!,
                                                       attributes: [NSAttributedString.Key.underlineStyle: NSUnderlineStyle.single.rawValue])
         descriptionLabel.text = character.description
+    }
+
+    func setupButton() {
+        if let urlString = character.detailURL {
+            websiteURL = URL(string: urlString)
+            websiteButton.addTarget(self, action: #selector(onWebsiteButtonTapped), for: .touchUpInside)
+        } else {
+            websiteButton.isEnabled = false
+        }
+    }
+
+    @objc func onWebsiteButtonTapped() {
+        guard let websiteURL = websiteURL else { return }
+        coordinator.showWebBrowser(url: websiteURL)
     }
 }

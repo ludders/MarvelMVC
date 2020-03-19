@@ -11,12 +11,13 @@ import UIKit
 @testable import MarvelMVC
 
 class MockCharacterListCoordinator: CharacterListCoordinatorProtocol {
-
     var childCoordinators: [Coordinator] = []
     var navigationController: UINavigationController = UINavigationController()
     var startCalled: Bool = false
     var showCharacterDetailsCalled: Bool = false
+    var showWebBrowserCalled: Bool = false
     var characterPassed: Character?
+    var urlPassed: URL?
 
     func start() {
         startCalled = true
@@ -25,5 +26,10 @@ class MockCharacterListCoordinator: CharacterListCoordinatorProtocol {
     func showCharacterDetails(character: Character) {
         showCharacterDetailsCalled = true
         characterPassed = character
+    }
+
+    func showWebBrowser(url: URL) {
+        showWebBrowserCalled = true
+        urlPassed = url
     }
 }

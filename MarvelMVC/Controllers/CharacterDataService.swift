@@ -68,7 +68,12 @@ class CharacterDataService: NSObject, CharacterDataServiceProtocol {
         if let thumbnail = result.thumbnail {
             imageURL = thumbnail.path + "." + thumbnail.thumbnailExtension
         }
-        let character = Character(name: result.name, description: result.description, imageURL: imageURL, image: nil)
+        let detailURL = result.urls?.first(where: { return $0.type == .detail })?.url
+        let character = Character(name: result.name,
+                                  description: result.description,
+                                  imageURL: imageURL,
+                                  image: nil,
+                                  detailURL: detailURL)
         self.characters.append(character)
     }
 }
