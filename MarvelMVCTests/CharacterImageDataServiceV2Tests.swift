@@ -136,7 +136,7 @@ class CharacterImageDataServiceV2Tests: XCTestCase {
     }
 
     func testFetchCharactersWithNilDataError() {
-        let expectedError = NetworkErrors.dataDecodeError()
+        let expectedError = NetworkErrors.dataDecodeError
         let mockResponse = MockHTTPURLResponseFactory.successImageResponse
         let mockURLSession = MockURLSession(mockData: nil,
                                             mockResponse: mockResponse,

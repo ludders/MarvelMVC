@@ -27,7 +27,7 @@ struct NetworkErrors {
                        userInfo: ["localizedDescription": "Unexpected response MIME type: \(mimeType)"])
     }
 
-    static func dataDecodeError() -> NSError {
+    static var dataDecodeError: NSError {
         return NSError(domain: "",
                        code: 0,
                        userInfo: ["localizedDescription": "Failed to decode response data"])

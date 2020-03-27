@@ -52,7 +52,7 @@ class CharacterImageDataServiceV2: CharacterImageDataServiceProtocolV2 {
                     return
                 }
                 guard let imageData = data else {
-                    onFailure?(NetworkErrors.dataDecodeError())
+                    onFailure?(NetworkErrors.dataDecodeError)
                     return
                 }
                 let image = UIImage(data: imageData)
