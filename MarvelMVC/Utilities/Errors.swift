@@ -8,10 +8,8 @@
 
 import Foundation
 
-final class NetworkErrors: NSError {
-
-    static func unexpectedResponseType() -> NSError {
-
+struct NetworkErrors {
+    static var unexpectedResponseType: NSError {
         return NSError(domain: "",
                        code: 0,
                        userInfo: ["localizedDescription": "Unexpected response type recieved"])

@@ -10,13 +10,21 @@ import UIKit
 
 class CharacterTableViewCell: UITableViewCell {
 
+    var lastReuseID: String? = nil
     let imageContainerView: UIView = UIView()
-    let characterImageView: UIImageView = UIImageView()
+    var characterImageView: UIImageView = UIImageView()
     let textView: UILabel = UILabel()
     let activityIndicatorView = UIActivityIndicatorView(style: .large)
 
-    public func configure(with character: Character) {
+    override func prepareForReuse() {
+        imageView?.image = nil
+        textView.text = nil
+        lastReuseID = UUID().uuidString
+        activityIndicatorView.startAnimating()
+        super.prepareForReuse()
+    }
 
+    public func configure(with character: Character) {
         contentView.addSubview(imageContainerView)
         imageContainerView.addSubview(characterImageView)
         contentView.addSubview(textView)
@@ -69,8 +77,6 @@ class CharacterTableViewCell: UITableViewCell {
 
         if characterImageView.image == nil {
             activityIndicatorView.startAnimating()
-        } else{
-            activityIndicatorView.stopAnimating()
         }
     }
 

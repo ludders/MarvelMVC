@@ -85,7 +85,7 @@ class CharacterImageDataServiceV2Tests: XCTestCase {
                                   image: nil)
         subject = CharacterImageDataServiceV2(urlSession: mockURLSession)
 
-        let expectedError = NetworkErrors.unexpectedResponseType()
+        let expectedError = NetworkErrors.unexpectedResponseType
         var actualError: Error?
 
         subject.fetchImage(for: mockCharacter, onSuccess: nil) { error in

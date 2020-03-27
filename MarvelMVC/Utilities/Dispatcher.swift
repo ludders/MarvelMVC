@@ -24,16 +24,3 @@ class MainDispatcher : Dispatcher {
         queue.async(execute: work)
     }
 }
-
-class MockDispatcher: Dispatcher {
-    var queue: DispatchQueue
-
-    public init() {
-        queue = DispatchQueue.main
-    }
-
-    //Most definately not an async task
-    func async(_ work: @escaping ()->Void) {
-        work()
-    }
-}

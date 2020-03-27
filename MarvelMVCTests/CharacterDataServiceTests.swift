@@ -59,7 +59,7 @@ class CharacterDataControllerTests: XCTestCase {
         mockURLSession = MockURLSession(mockData: nil,
                                         mockResponse: response,
                                         mockError: nil)
-        let expectedError = NetworkErrors.unexpectedResponseType()
+        let expectedError = NetworkErrors.unexpectedResponseType
 
         subject = CharacterDataService(urlSession: mockURLSession)
         subject.delegate = mockDelegate

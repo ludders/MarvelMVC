@@ -10,7 +10,6 @@ import Foundation
 import UIKit
 
 protocol CharacterImageDataServiceProtocolV2 {
-    var defaultImage: UIImage? { get set }
     func fetchImage(for character: Character,
                     onSuccess: ((UIImage?) -> ())?,
                     onFailure: ((Error) -> ())?)
@@ -40,7 +39,7 @@ class CharacterImageDataServiceV2: CharacterImageDataServiceProtocolV2 {
                 return
             }
             guard let httpResponse = response as? HTTPURLResponse else {
-                onFailure?(NetworkErrors.unexpectedResponseType())
+                onFailure?(NetworkErrors.unexpectedResponseType)
                 return
             }
             guard (200...299).contains(httpResponse.statusCode) else {

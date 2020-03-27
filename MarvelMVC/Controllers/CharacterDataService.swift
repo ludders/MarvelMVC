@@ -10,7 +10,6 @@ import Foundation
 import UIKit
 
 protocol CharacterDataServiceProtocol {
-    var characters: [Character] { get set }
     var delegate: CharacterDataServiceDelegate? { get set }
     func fetchCharacters()
 }
@@ -38,7 +37,7 @@ class CharacterDataService: NSObject, CharacterDataServiceProtocol {
             }
             guard let httpResponse = response as? HTTPURLResponse else {
                 self.delegate?.didFetchCharacters(characters: nil,
-                                                  error: NetworkErrors.unexpectedResponseType())
+                                                  error: NetworkErrors.unexpectedResponseType)
                 return
             }
             if !(200...299).contains(httpResponse.statusCode) {

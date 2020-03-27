@@ -9,24 +9,57 @@
 import Foundation
 import UIKit
 
-protocol CharacterListViewModelProtocol {
-    var characters: [Character] { get set }
-    var dataService: CharacterDataServiceProtocol { get set }
-    var imageDataService: CharacterImageDataServiceProtocolV2 { get set }
+protocol CharacterListViewModelDelegate {
+    func didUpdateCharacters()
 }
 
-class CharacterListViewModel: CharacterListViewModelProtocol {
+protocol CharacterListViewModelProtocol {
+    var characters: [Character] { get }
+    var delegate: CharacterListViewModelDelegate? { get set }
+    var dataService: CharacterDataServiceProtocol { get }
+    var imageDataService: CharacterImageDataServiceProtocolV2 { get }
 
+    func getCharacters()
+    func getImage(for character: Character, onSuccess: ((UIImage?) -> Void)?, onFailure: ((Error) -> Void)?)
+}
+
+class CharacterListViewModel: CharacterListViewModelProtocol, CharacterDataServiceDelegate {
     var characters: [Character]
+    var delegate: CharacterListViewModelDelegate?
     var dataService: CharacterDataServiceProtocol
     var imageDataService: CharacterImageDataServiceProtocolV2
 
     init(characters: [Character] = [Character](),
-         dataController: CharacterDataServiceProtocol = CharacterDataService(),
-         imageDataController: CharacterImageDataServiceProtocolV2 = CharacterImageDataServiceV2()) {
+         dataService: CharacterDataServiceProtocol = CharacterDataService(),
+         imageDataService: CharacterImageDataServiceProtocolV2 = CharacterImageDataServiceV2()) {
 
         self.characters = characters
-        self.dataService = dataController
-        self.imageDataService = imageDataController
+        self.dataService = dataService
+        self.imageDataService = imageDataService
+        self.dataService.delegate = self
+    }
+
+    func getCharacters() {
+        dataService.fetchCharacters()
+    }
+
+    func getImage(for character: Character, onSuccess: ((UIImage?) -> Void)?, onFailure: ((Error) -> Void)?) {
+        //TODO: Change to 'If image not present in Cache' logic
+        if character.image == nil {
+            guard let index = characters.firstIndex(of: character) else { return }
+            imageDataService.fetchImage(for: character, onSuccess: { image in
+                self.characters[index].image = image
+                onSuccess?(image)
+            }) { error in
+                onFailure?(error)
+            }
+        } else {
+            onSuccess?(character.image)
+        }
+    }
+
+    func didFetchCharacters(characters: [Character]?, error: Error?) {
+        self.characters = characters ?? []
+        delegate?.didUpdateCharacters()
     }
 }

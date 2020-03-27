@@ -7,9 +7,11 @@
 //
 
 import Foundation
+import UIKit
 @testable import MarvelMVC
 
 class MockCharacterListViewModel: CharacterListViewModelProtocol {
+    var delegate: CharacterListViewModelDelegate?
     var characters: [Character]
     var dataService: CharacterDataServiceProtocol
     var imageDataService: CharacterImageDataServiceProtocolV2
@@ -20,5 +22,17 @@ class MockCharacterListViewModel: CharacterListViewModelProtocol {
         self.characters = characters
         self.dataService = dataService
         self.imageDataService = imageDataService
+    }
+
+    func getCharacters() {
+        return
+    }
+
+    func getImage(for character: Character, onSuccess: ((UIImage?) -> Void)?, onFailure: ((Error) -> Void)?) {
+        imageDataService.fetchImage(for: character, onSuccess: { image in
+            onSuccess?(image)
+        }) { error in
+            onFailure?(error)
+        }
     }
 }

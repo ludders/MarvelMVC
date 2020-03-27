@@ -8,18 +8,20 @@
 
 import UIKit
 
-class CharacterListViewController: UITableViewController, UITableViewDataSourcePrefetching, CharacterDataServiceDelegate {
+class CharacterListViewController: UITableViewController, CharacterListViewModelDelegate {
 
     var coordinator: CharacterListCoordinatorProtocol
     var characterListViewModel: CharacterListViewModelProtocol
     var defaultCharacterImage: UIImage? = UIImage(named: "characterDefault")
-    var mainDispatcher: Dispatcher = MainDispatcher()
+    var mainDispatcher: Dispatcher
 
     init(characterListViewModel: CharacterListViewModelProtocol = CharacterListViewModel(),
-         coordinator: CharacterListCoordinatorProtocol) {
+         coordinator: CharacterListCoordinatorProtocol,
+         mainDispatcher: Dispatcher = MainDispatcher()) {
         self.characterListViewModel = characterListViewModel
         self.coordinator = coordinator
-        super.init(nibName: nil, bundle: Bundle.main)
+        self.mainDispatcher = mainDispatcher
+        super.init(nibName: nil, bundle: nil)
     }
 
     required init?(coder: NSCoder) {
@@ -31,9 +33,8 @@ class CharacterListViewController: UITableViewController, UITableViewDataSourceP
         navigationController?.navigationBar.prefersLargeTitles = true
         navigationItem.title = "Characters"
         tableView.register(CharacterTableViewCell.self, forCellReuseIdentifier: "CharacterTableViewCell")
-        characterListViewModel.imageDataService.defaultImage = defaultCharacterImage
-        characterListViewModel.dataService.delegate = self
-        characterListViewModel.dataService.fetchCharacters()
+        characterListViewModel.delegate = self
+        characterListViewModel.getCharacters()
     }
 
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -50,32 +51,21 @@ class CharacterListViewController: UITableViewController, UITableViewDataSourceP
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "CharacterTableViewCell", for: indexPath) as? CharacterTableViewCell else {
             fatalError("Failed to dequeue CharacterTableViewCell from tableView")
         }
-
         let character = characterListViewModel.characters[indexPath.row]
-        if character.image == nil {
-            fetchCharacterImageAndUpdateTableRow(character: character, indexPathForRow: indexPath)
-        }
         cell.configure(with: character)
-
-        return cell
-    }
-
-    func fetchCharacterImageAndUpdateTableRow(character: Character, indexPathForRow indexPath: IndexPath) {
-        characterListViewModel.imageDataService.fetchImage(for: character, onSuccess: { image in
-            self.characterListViewModel.characters[indexPath.row].image = image
-            self.updateTableRow(for: character)
-        }, onFailure: { error in
-            print(error)
-        })
-    }
-
-    func updateTableRow(for character: Character) {
-        if let row = self.characterListViewModel.characters.firstIndex(of: character) {
-            let indexPath = IndexPath(row: row, section: 0)
-            mainDispatcher.async {
-                self.tableView.reloadRows(at: [indexPath], with: .automatic)
+        let id = cell.lastReuseID
+        characterListViewModel.getImage(for: character, onSuccess: { image in
+            self.mainDispatcher.async {
+                //Checks that the cell hasn't been reused by the time this block gets executed
+                if id == cell.lastReuseID {
+                    cell.characterImageView.image = image
+                    cell.activityIndicatorView.stopAnimating()
+                }
             }
+        }) { error in
+            print(error)
         }
+        return cell
     }
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -83,26 +73,9 @@ class CharacterListViewController: UITableViewController, UITableViewDataSourceP
         coordinator.showCharacterDetails(character: character)
     }
 
-    // MARK: - Table view data source prefetching function(s)
+    // MARK: - CharacterListViewModel delegate function(s)
 
-    func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
-        for indexPath in indexPaths {
-            let character = characterListViewModel.characters[indexPath.row]
-            if character.image == nil {
-                characterListViewModel.imageDataService.fetchImage(for: character, onSuccess: { [weak self] image in
-                    self?.characterListViewModel.characters[indexPath.row].image = image
-                }) { error in
-                    print(error)
-                }
-            }
-        }
-    }
-
-    // MARK: - Character Data Service delegate function(s
-
-    func didFetchCharacters(characters: [Character]?, error: Error?) {
-        guard let characters = characters else { return }
-        characterListViewModel.characters = characters
+    func didUpdateCharacters() {
         mainDispatcher.async {
             self.tableView.reloadData()
         }

@@ -10,8 +10,7 @@ import UIKit
 
 class MockUITableView: UITableView {
 
-    var reloadRowsCalled: Bool = false
-    var indexPathsUsed: [IndexPath]?
+    var reloadDataCalled: Bool = false
 
     public init() {
         super.init(frame: CGRect.zero, style: .plain)
@@ -21,8 +20,7 @@ class MockUITableView: UITableView {
         fatalError("init(coder:) has not been implemented")
     }
 
-    override func reloadRows(at indexPaths: [IndexPath], with animation: UITableView.RowAnimation) {
-        reloadRowsCalled = true
-        indexPathsUsed = indexPaths
+    override func reloadData() {
+        reloadDataCalled = true
     }
 }
