@@ -30,7 +30,7 @@
 		9D9FE09A24006011001C0038 /* CharacterImageDataServiceV2Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D9FE09924006011001C0038 /* CharacterImageDataServiceV2Tests.swift */; };
 		9DCB424024194369005E80A0 /* Dispatcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DCB423F24194369005E80A0 /* Dispatcher.swift */; };
 		9DCB424224195415005E80A0 /* MockCharacterListCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DCB424124195415005E80A0 /* MockCharacterListCoordinator.swift */; };
-		9DD004C523FB11B400DF4553 /* CharacterListCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DD004C423FB11B400DF4553 /* CharacterListCoordinator.swift */; };
+		9DD004C523FB11B400DF4553 /* MainCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DD004C423FB11B400DF4553 /* MainCoordinator.swift */; };
 		9DD004C723FB163F00DF4553 /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DD004C623FB163F00DF4553 /* Coordinator.swift */; };
 		9DD007B123FC3BDF00DF4553 /* CharacterDataServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DD007B023FC3BDF00DF4553 /* CharacterDataServiceTests.swift */; };
 		9DD007B523FC3D9A00DF4553 /* MockCharacterDataServiceDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DD007B423FC3D9A00DF4553 /* MockCharacterDataServiceDelegate.swift */; };
@@ -83,7 +83,7 @@
 		9D9FE09924006011001C0038 /* CharacterImageDataServiceV2Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterImageDataServiceV2Tests.swift; sourceTree = "<group>"; };
 		9DCB423F24194369005E80A0 /* Dispatcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dispatcher.swift; sourceTree = "<group>"; };
 		9DCB424124195415005E80A0 /* MockCharacterListCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockCharacterListCoordinator.swift; sourceTree = "<group>"; };
-		9DD004C423FB11B400DF4553 /* CharacterListCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterListCoordinator.swift; sourceTree = "<group>"; };
+		9DD004C423FB11B400DF4553 /* MainCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainCoordinator.swift; sourceTree = "<group>"; };
 		9DD004C623FB163F00DF4553 /* Coordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
 		9DD007B023FC3BDF00DF4553 /* CharacterDataServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterDataServiceTests.swift; sourceTree = "<group>"; };
 		9DD007B423FC3D9A00DF4553 /* MockCharacterDataServiceDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockCharacterDataServiceDelegate.swift; sourceTree = "<group>"; };
@@ -190,7 +190,7 @@
 		9DD004C323FB119000DF4553 /* Coordinators */ = {
 			isa = PBXGroup;
 			children = (
-				9DD004C423FB11B400DF4553 /* CharacterListCoordinator.swift */,
+				9DD004C423FB11B400DF4553 /* MainCoordinator.swift */,
 				9DD004C623FB163F00DF4553 /* Coordinator.swift */,
 			);
 			path = Coordinators;
@@ -420,7 +420,7 @@
 				9D727F15241118150094D0FC /* Errors.swift in Sources */,
 				9DCB424024194369005E80A0 /* Dispatcher.swift in Sources */,
 				9D69FF4A238D1B5500DFB068 /* CharacterDataService.swift in Sources */,
-				9DD004C523FB11B400DF4553 /* CharacterListCoordinator.swift in Sources */,
+				9DD004C523FB11B400DF4553 /* MainCoordinator.swift in Sources */,
 				9DE05BF12381E3FA0061AC2E /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

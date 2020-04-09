@@ -10,16 +10,14 @@ import UIKit
 
 class CharacterListViewController: UITableViewController, CharacterListViewModelDelegate {
 
-    var coordinator: CharacterListCoordinatorProtocol
+    weak var delegate: CharacterListViewControllerDelegate?
     var characterListViewModel: CharacterListViewModelProtocol
     var defaultCharacterImage: UIImage? = UIImage(named: "characterDefault")
     var mainDispatcher: Dispatcher
 
     init(characterListViewModel: CharacterListViewModelProtocol = CharacterListViewModel(),
-         coordinator: CharacterListCoordinatorProtocol,
          mainDispatcher: Dispatcher = MainDispatcher()) {
         self.characterListViewModel = characterListViewModel
-        self.coordinator = coordinator
         self.mainDispatcher = mainDispatcher
         super.init(nibName: nil, bundle: nil)
     }
@@ -70,7 +68,7 @@ class CharacterListViewController: UITableViewController, CharacterListViewModel
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let character = characterListViewModel.characters[indexPath.row]
-        coordinator.showCharacterDetails(character: character)
+        delegate?.didTapCharacter(character: character)
     }
 
     // MARK: - CharacterListViewModel delegate function(s)

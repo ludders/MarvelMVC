@@ -11,12 +11,12 @@ import XCTest
 
 class CharacterListCoordinatorTests: XCTestCase {
 
-    var subject: CharacterListCoordinator!
+    var subject: MainCoordinator!
     var navigationController = UINavigationController()
     let mockViewModel = MockCharacterListViewModel()
 
     override func setUp() {
-        subject = CharacterListCoordinator(navigationController: navigationController, viewModel: mockViewModel)
+        subject = MainCoordinator(navigationController: navigationController, viewModel: mockViewModel)
     }
 
     func testStartPushesCharacterListViewController() {

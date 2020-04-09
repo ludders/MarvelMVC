@@ -6,8 +6,6 @@
 //  Copyright © 2019 David Ludlow. All rights reserved.
 //
 
-//TODO: Fix constraint issues (Image View)
-
 import UIKit
 
 class DetailViewController: UIViewController {
@@ -41,11 +39,10 @@ class DetailViewController: UIViewController {
     }()
     var character: Character
     var websiteURL: URL?
-    var coordinator: CharacterListCoordinatorProtocol
+    var delegate: CharacterListViewControllerDelegate?
 
-    init(character: Character, coordinator: CharacterListCoordinatorProtocol) {
+    init(character: Character) {
         self.character = character
-        self.coordinator = coordinator
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -125,6 +122,6 @@ class DetailViewController: UIViewController {
 
     @objc func onWebsiteButtonTapped() {
         guard let websiteURL = websiteURL else { return }
-        coordinator.showWebBrowser(url: websiteURL)
+        delegate?.didTapWebsite(url: websiteURL)
     }
 }

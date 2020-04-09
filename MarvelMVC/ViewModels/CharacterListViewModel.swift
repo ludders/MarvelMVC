@@ -28,14 +28,18 @@ class CharacterListViewModel: CharacterListViewModelProtocol, CharacterDataServi
     var delegate: CharacterListViewModelDelegate?
     var dataService: CharacterDataServiceProtocol
     var imageDataService: CharacterImageDataServiceProtocolV2
+    var imageCache: NSCache<NSString, UIImage>
 
     init(characters: [Character] = [Character](),
          dataService: CharacterDataServiceProtocol = CharacterDataService(),
-         imageDataService: CharacterImageDataServiceProtocolV2 = CharacterImageDataServiceV2()) {
+         imageDataService: CharacterImageDataServiceProtocolV2 = CharacterImageDataServiceV2(),
+         imageCache: NSCache<NSString, UIImage> = NSCache<NSString, UIImage>()) {
 
         self.characters = characters
         self.dataService = dataService
         self.imageDataService = imageDataService
+        self.imageCache = imageCache
+
         self.dataService.delegate = self
     }
 
@@ -44,17 +48,31 @@ class CharacterListViewModel: CharacterListViewModelProtocol, CharacterDataServi
     }
 
     func getImage(for character: Character, onSuccess: ((UIImage?) -> Void)?, onFailure: ((Error) -> Void)?) {
-        //TODO: Change to 'If image not present in Cache' logic
-        if character.image == nil {
-            guard let index = characters.firstIndex(of: character) else { return }
+
+        guard let index = characters.firstIndex(of: character) else { return }
+        guard let imageURL = character.imageURL else {
+            onSuccess?(nil)
+            return
+        }
+
+        //Images cached per-URL, not per-character
+        if let cachedImageForURL = imageCache.object(forKey: imageURL as NSString){
+            if character.image == nil {
+                self.characters[index].image = cachedImageForURL
+            }
+            onSuccess?(cachedImageForURL)
+        } else {
             imageDataService.fetchImage(for: character, onSuccess: { image in
+                guard let image = image else {
+                    onSuccess?(nil)
+                    return
+                }
                 self.characters[index].image = image
+                self.imageCache.setObject(image, forKey: imageURL as NSString)
                 onSuccess?(image)
             }) { error in
                 onFailure?(error)
             }
-        } else {
-            onSuccess?(character.image)
         }
     }
 
