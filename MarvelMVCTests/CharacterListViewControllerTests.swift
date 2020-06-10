@@ -15,21 +15,20 @@ class CharacterListViewControllerTests: XCTestCase {
     var subject: CharacterListViewController!
     var mockViewModel: MockCharacterListViewModel!
     var mockCharacterImageDataService: MockCharacterImageDataService!
-    var mockCoordinator: MockCharacterListCoordinator!
+    var mockDelegate: MockCharacterListViewControllerDelegate!
     var mockDispatcher: MockDispatcher!
     var mockUITableView = MockUITableView()
     var testImage = UIImage(named: "blank")
     var testImage2 = UIImage(named: "characterDefault")
-    
 
     override func setUp() {
         mockCharacterImageDataService = MockCharacterImageDataService()
         mockViewModel = MockCharacterListViewModel(imageDataService: mockCharacterImageDataService)
-        mockCoordinator = MockCharacterListCoordinator()
+        mockDelegate = MockCharacterListViewControllerDelegate()
         mockDispatcher = MockDispatcher()
         subject = CharacterListViewController(characterListViewModel: mockViewModel,
-                                              coordinator: mockCoordinator,
                                               mainDispatcher: mockDispatcher)
+        subject.delegate = mockDelegate
     }
 
     func testInitWithCoder_ReturnsNil() {
@@ -78,17 +77,17 @@ class CharacterListViewControllerTests: XCTestCase {
         XCTAssertEqual(testImage, actualImage)
     }
 
-    func testDidSelectRowAt_StartsCharacterListCoordinator() {
+    func testDidSelectRowAt_CallsDelegateDidTapCharacter() {
         let mockCharacter = Character(name: "Test", description: "Description", imageURL: "www.blah.com/test.jpg", image: nil)
         let mockCharacter2 = Character(name: "Test2", description: "Description2", imageURL: "www.blah.com/test2.jpg", image: nil)
 
         mockViewModel.characters = [mockCharacter, mockCharacter2]
-        subject.coordinator = mockCoordinator
 
         let indexPath = IndexPath(row: 1, section: 0)
         subject.tableView(subject.tableView, didSelectRowAt: indexPath)
-        XCTAssertTrue(mockCoordinator.showCharacterDetailsCalled)
-        XCTAssertEqual(mockCoordinator.characterPassed, mockCharacter2)
+
+        XCTAssertTrue(mockDelegate.showCharacterDetailsCalled)
+        XCTAssertEqual(mockDelegate.characterPassed, mockCharacter2)
     }
 
     func testDidUpdateCharacters_ReloadsTableView() {

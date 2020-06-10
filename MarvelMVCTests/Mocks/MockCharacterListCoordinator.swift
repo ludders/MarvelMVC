@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 @testable import MarvelMVC
 
-class MockCharacterListCoordinator: CharacterListCoordinatorProtocol {
+class MockCharacterListCoordinator: Coordinator {
     var childCoordinators: [Coordinator] = []
     var navigationController: UINavigationController = UINavigationController()
     var startCalled: Bool = false

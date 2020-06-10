@@ -10,11 +10,6 @@ import Foundation
 import SafariServices
 import UIKit
 
-protocol CharacterListViewControllerDelegate: AnyObject {
-    func didTapCharacter(character: Character)
-    func didTapWebsite(url: URL)
-}
-
 class MainCoordinator: Coordinator {
 
     var childCoordinators: [Coordinator] = []

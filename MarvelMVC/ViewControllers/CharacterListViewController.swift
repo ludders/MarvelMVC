@@ -8,11 +8,18 @@
 
 import UIKit
 
+// MARK: Delegated actions
+
+protocol CharacterListViewControllerDelegate: AnyObject {
+    func didTapCharacter(character: Character)
+    func didTapWebsite(url: URL)
+}
+
 class CharacterListViewController: UITableViewController, CharacterListViewModelDelegate {
 
+    //MARK: Properties
     weak var delegate: CharacterListViewControllerDelegate?
     var characterListViewModel: CharacterListViewModelProtocol
-    var defaultCharacterImage: UIImage? = UIImage(named: "characterDefault")
     var mainDispatcher: Dispatcher
 
     init(characterListViewModel: CharacterListViewModelProtocol = CharacterListViewModel(),
@@ -31,6 +38,7 @@ class CharacterListViewController: UITableViewController, CharacterListViewModel
         navigationController?.navigationBar.prefersLargeTitles = true
         navigationItem.title = "Characters"
         tableView.register(CharacterTableViewCell.self, forCellReuseIdentifier: "CharacterTableViewCell")
+        tableView.showsVerticalScrollIndicator = false
         characterListViewModel.delegate = self
         characterListViewModel.getCharacters()
     }
@@ -39,7 +47,7 @@ class CharacterListViewController: UITableViewController, CharacterListViewModel
         return 150
     }
 
-    // MARK: - Table view data source
+    // MARK: - Datasource
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return characterListViewModel.characters.count
@@ -71,8 +79,7 @@ class CharacterListViewController: UITableViewController, CharacterListViewModel
         delegate?.didTapCharacter(character: character)
     }
 
-    // MARK: - CharacterListViewModel delegate function(s)
-
+    // MARK: ViewModel delegate
     func didUpdateCharacters() {
         mainDispatcher.async {
             self.tableView.reloadData()
